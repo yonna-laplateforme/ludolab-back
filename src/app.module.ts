@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PrismaModule } from './prisma/prisma.module';
 import { AppController } from './app.controller';
 import { UsersModule } from './users/users.module';
-import { ExerciseModule } from './exercise/exercise.module';
+import { ExerciseModule } from './exercises/exercises.module';
 import { AiInteractionsModule } from './ai_interactions/ai_interactions.module';
 import { ProgressionService } from './progression/progression.service';
 import { ProgressionController } from './progression/progression.controller';
