@@ -7,9 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id         Int      @id @default(autoincrement())
+  first_name String?  // le ? signifie optionnel
+  last_name  String?
+  email      String   @unique
+  username   String   @unique 
+  password   String
+  role       String?  @default("user")
+  parent_id  Int?
+  created_at DateTime @default(now())
+  is_premium Boolean  @default(false)
 
-  @@map("user") // ◄ Permet de faire le pont si ta table s'appelle "users" dans MySQL
+  @@map("users") // ◄ Très important : dit à Prisma que la table s'appelle "users" au pluriel
 }
+
+ 
