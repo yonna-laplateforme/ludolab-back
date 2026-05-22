@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class SubjectsService {
   constructor(private prisma: PrismaService) {}
 
-  // 1. CREATE
+  // 1. Créer
   async create(data: { name: string; icon: string }) {
     return this.prisma.subjects.create({
       data: {
@@ -15,12 +15,12 @@ export class SubjectsService {
     });
   }
 
-  // 2. READ ALL
+  // 2. Recuperer tout
   async findAll() {
     return this.prisma.subjects.findMany();
   }
 
-  // 2. READ ONE
+  // 2. recuperé par id
   async findOne(id: number) {
     const subject = await this.prisma.subjects.findUnique({
       where: { id },
@@ -33,9 +33,9 @@ export class SubjectsService {
     return subject;
   }
 
-  // 3. UPDATE
+  // 3. modifier
   async update(id: number, data: { name?: string; icon?: string }) {
-    await this.findOne(id); // Vérifie s'il existe
+    await this.findOne(id); 
 
     return this.prisma.subjects.update({
       where: { id },
@@ -43,9 +43,9 @@ export class SubjectsService {
     });
   }
 
-  // 4. DELETE
+  // 4. Supprimer
   async remove(id: number) {
-    await this.findOne(id); // Vérifie s'il existe
+    await this.findOne(id); 
 
     return this.prisma.subjects.delete({
       where: { id },
