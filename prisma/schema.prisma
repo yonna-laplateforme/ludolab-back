@@ -6,19 +6,89 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-model User {
-  id         Int      @id @default(autoincrement())
-  first_name String?  // le ? signifie optionnel
-  last_name  String?
-  email      String   @unique
-  username   String   @unique 
-  password   String
-  role       String?  @default("user")
-  parent_id  Int?
-  created_at DateTime @default(now())
-  is_premium Boolean  @default(false)
 
-  @@map("users") // ◄ Très important : dit à Prisma que la table s'appelle "users" au pluriel
+model User {
+  id              Int               @id @default(autoincrement())
+  first_name      String            @db.VarChar(255)
+  last_name       String            @db.VarChar(255)
+  email           String            @unique(map: "email") @db.VarChar(255)
+  username        String            @db.VarChar(255)
+  password        String            @db.VarChar(255)
+  role            String            @db.VarChar(50)
+  parent_id       Int?
+  created_at      DateTime          @default(now()) @db.Timestamp(0)
+  is_premium      Boolean           @default(false)
+  ai_interactions ai_interactions[]
+  exercises       exercises[]
+  progression     progression[]
+  subscriptions   subscriptions[]
+  users           User?             @relation("usersTousers", fields: [parent_id], references: [id], onUpdate: Restrict, map: "users_ibfk_1")
+  other_users     User[]            @relation("usersTousers")
+
+  @@index([parent_id], map: "parent_id")
+  @@map("users")
 }
 
- 
+model ai_interactions {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  exercise_id   Int
+  user_question String?   @db.Text
+  ai_response   String?   @db.Text
+  help_type     String?   @db.VarChar(255)
+  created_at    DateTime  @default(now()) @db.Timestamp(0)
+  users         User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ai_interactions_ibfk_1")
+  exercises     exercises @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ai_interactions_ibfk_2")
+
+  @@index([exercise_id], map: "exercise_id")
+  @@index([user_id], map: "user_id")
+}
+
+model exercises {
+  id              Int               @id @default(autoincrement())
+  user_id         Int
+  subject_id      Int
+  image_path      String?           @db.VarChar(255)
+  title           String?           @db.VarChar(255)
+  level           String?           @db.VarChar(255)
+  ai_interactions ai_interactions[]
+  users           User              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "exercises_ibfk_1")
+  subjects        subjects          @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "exercises_ibfk_2")
+  progression     progression[]
+
+  @@index([subject_id], map: "subject_id")
+  @@index([user_id], map: "user_id")
+}
+
+model progression {
+  id               Int       @id @default(autoincrement())
+  user_id          Int
+  exercise_id      Int
+  status           String    @default("en_cours") @db.VarChar(255)
+  score_percentage Float?    @db.Float
+  last_activity    DateTime  @default(now()) @db.Timestamp(0)
+  users            User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "progression_ibfk_1")
+  exercises        exercises @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "progression_ibfk_2")
+
+  @@index([exercise_id], map: "exercise_id")
+  @@index([user_id], map: "user_id")
+}
+
+model subjects {
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(255)
+  icon      String      @db.VarChar(255)
+  exercises exercises[]
+}
+
+model subscriptions {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  plan_name  String?   @db.VarChar(255)
+  is_active  Boolean?  @default(false)
+  start_date DateTime? @db.Date
+  end_date   DateTime? @db.Date
+  users      User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "subscriptions_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}

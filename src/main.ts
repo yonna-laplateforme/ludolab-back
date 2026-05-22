@@ -5,7 +5,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   // Permet à ton front de se connecter à ton API (très utile pour la suite)
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:3001', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   // Ton serveur va écouter sur le port 3000
   await app.listen(3000);
