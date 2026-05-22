@@ -29,7 +29,7 @@ model User {
   @@map("users")
 }
 
-model ai_interactions {
+model Ai_interaction {
   id            Int       @id @default(autoincrement())
   user_id       Int
   exercise_id   Int
@@ -42,9 +42,10 @@ model ai_interactions {
 
   @@index([exercise_id], map: "exercise_id")
   @@index([user_id], map: "user_id")
+  @@map("ai_interactions")
 }
 
-model exercises {
+model Exercise {
   id              Int               @id @default(autoincrement())
   user_id         Int
   subject_id      Int
@@ -58,9 +59,10 @@ model exercises {
 
   @@index([subject_id], map: "subject_id")
   @@index([user_id], map: "user_id")
+  @@map("exercises")
 }
 
-model progression {
+model Progression {
   id               Int       @id @default(autoincrement())
   user_id          Int
   exercise_id      Int
@@ -72,16 +74,19 @@ model progression {
 
   @@index([exercise_id], map: "exercise_id")
   @@index([user_id], map: "user_id")
+  @@map("progression")
 }
 
-model subjects {
+model Subject {
   id        Int         @id @default(autoincrement())
   name      String      @db.VarChar(255)
   icon      String      @db.VarChar(255)
   exercises exercises[]
+
+  @@map("subjects")
 }
 
-model subscriptions {
+model Subscription {
   id         Int       @id @default(autoincrement())
   user_id    Int
   plan_name  String?   @db.VarChar(255)
@@ -91,4 +96,5 @@ model subscriptions {
   users      User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "subscriptions_ibfk_1")
 
   @@index([user_id], map: "user_id")
+  @@map("subscriptions")
 }
