@@ -12,25 +12,25 @@ export class ExerciseService {
     title: string;
     level: string;
   }) {
-    return this.prisma.exercises.create({
+    return this.prisma.exercise.create({
       // ◄ Ajout du "s"
       data: data,
     });
   }
 
   async findAll() {
-    return this.prisma.exercises.findMany(); // ◄ Ajout du "s"
+    return this.prisma.exercise.findMany(); // ◄ Ajout du "s"
   }
 
   async findOne(id: number) {
-    return this.prisma.exercises.findUnique({
+    return this.prisma.exercise.findUnique({
       // ◄ Ajout du "s"
       where: { id },
     });
   }
 
   async remove(id: number) {
-    return this.prisma.exercises.delete({
+    return this.prisma.exercise.delete({
       // ◄ Ajout du "s"
       where: { id },
     });
