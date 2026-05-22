@@ -7,7 +7,7 @@ export class UsersService {
 
   // 1. CREATE
  
-async create(data: { email: string; username: string; first_name: string; last_name: string }) {
+async create(data: { email: string; username: string; first_name: string; last_name: string; role: string}) {
   return this.prisma.user.create({
     data: {
       email: data.email,
@@ -15,7 +15,7 @@ async create(data: { email: string; username: string; first_name: string; last_n
       first_name: data.first_name, // ◄ Ajouté
       last_name: data.last_name,   // ◄ Ajouté
       password: 'password_temporaire', 
-      role: 'user',
+      role: data.role
     },
   });
 }
