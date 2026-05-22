@@ -1,5 +1,6 @@
 import {Controller,Get,Post,Body,Param, Delete } from '@nestjs/common';
 import { ExerciseService } from './exercises.service';
+import { CreateExerciseDto } from './dto/create-exercise.dto';
 
 @Controller('exercise')
 export class ExerciseController {
@@ -7,13 +8,7 @@ export class ExerciseController {
   @Post()
   create(
     @Body()
-    createExerciseDto: {
-      user_id: number;
-      subject_id: number;
-      image_path: string;
-      title: string;
-      level: string;
-    },
+    createExerciseDto: CreateExerciseDto,
   ) {
     return this.exerciseService.create(createExerciseDto);
   }
