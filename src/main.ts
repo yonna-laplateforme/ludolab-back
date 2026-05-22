@@ -11,7 +11,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Ton serveur va écouter sur le port 3000
+
   await app.listen(3000);
   console.log('🚀 Le serveur NestJS tourne sur : http://localhost:3000');
 }
