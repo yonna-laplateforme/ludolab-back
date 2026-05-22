@@ -15,6 +15,7 @@ async create(data: { email: string; username: string; first_name: string; last_n
       first_name: data.first_name, // ◄ Ajouté
       last_name: data.last_name,   // ◄ Ajouté
       password: 'password_temporaire', 
+      role: 'user',
     },
   });
 }
