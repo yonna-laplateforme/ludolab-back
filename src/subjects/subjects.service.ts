@@ -7,22 +7,21 @@ export class SubjectsService {
 
   // 1. Créer
   async create(data: { name: string; icon: string }) {
-    return this.prisma.subjects.create({
+    return this.prisma.subject.create({
       data: {
         name: data.name,
         icon: data.icon,
       },
     });
   }
-
   // 2. Recuperer tout
   async findAll() {
-    return this.prisma.subjects.findMany();
+    return this.prisma.subject.findMany();
   }
 
   // 2. recuperé par id
   async findOne(id: number) {
-    const subject = await this.prisma.subjects.findUnique({
+    const subject = await this.prisma.subject.findUnique({
       where: { id },
     });
 
@@ -37,7 +36,7 @@ export class SubjectsService {
   async update(id: number, data: { name?: string; icon?: string }) {
     await this.findOne(id); 
 
-    return this.prisma.subjects.update({
+    return this.prisma.subject.update({
       where: { id },
       data,
     });
@@ -47,7 +46,7 @@ export class SubjectsService {
   async remove(id: number) {
     await this.findOne(id); 
 
-    return this.prisma.subjects.delete({
+    return this.prisma.subject.delete({
       where: { id },
     });
   }
