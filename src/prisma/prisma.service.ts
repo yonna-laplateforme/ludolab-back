@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  exercise: any;
   async onModuleInit() {
     console.log('⏳ Connexion à la base de données MySQL...');
     await this.$connect();
