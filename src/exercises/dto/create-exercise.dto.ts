@@ -4,4 +4,5 @@ export class CreateExerciseDto {
     image_path!: string;
     title!: string;
     level!: string;
+    description!: string;
 }
