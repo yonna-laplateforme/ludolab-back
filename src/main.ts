@@ -12,7 +12,7 @@ async function bootstrap() {
   });
 
 
-  await app.listen(3000);
-  console.log('🚀 Le serveur NestJS tourne sur : http://localhost:3000');
+  await app.listen(3001);
+  console.log('🚀 Le serveur NestJS tourne sur : http://localhost:3001');
 }
 bootstrap();
