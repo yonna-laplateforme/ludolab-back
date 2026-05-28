@@ -11,6 +11,7 @@ export class ExerciseService {
     image_path: string;
     title: string;
     level: string;
+    description: string;
   }) {
     return this.prisma.exercise.create({
       // ◄ Ajout du "s"
