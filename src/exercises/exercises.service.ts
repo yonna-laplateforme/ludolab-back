@@ -1,21 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateExerciseDto } from './dto/create-exercise.dto'
 
 @Injectable()
 export class ExerciseService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: {
-    user_id: number;
-    subject_id: number;
-    image_path: string;
-    title: string;
-    level: string;
-    description: string;
-  }) {
+  async create(createExerciseDto: CreateExerciseDto) {
     return this.prisma.exercise.create({
-      // ◄ Ajout du "s"
-      data: data,
+      data: createExerciseDto,
+      include: {
+        subjects: true
+      }
     });
   }
 

@@ -3,11 +3,16 @@ import { ExerciseService } from './exercises.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { AiInteractionsService } from '../ai_interactions/ai_interactions.service';
 import { CreateExerciseRequestDto } from './dto/create-exercise-request.dto'
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('Exercises')
 @Controller('exercises')
 export class ExerciseController {
   constructor(private readonly exerciseService: ExerciseService, private ai: AiInteractionsService) {}
+  
   @Post()
+  @ApiOperation({ summary: 'Créer un exercice automatiquement via une image (Gemini)' })
+  @ApiResponse({ status: 201, description: 'L\'exercice a été créé avec succès.' })
   async create(
     @Body()
     body: CreateExerciseRequestDto
