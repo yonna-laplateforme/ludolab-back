@@ -5,4 +5,5 @@ export class CreateExerciseDto {
     title!: string;
     level!: string;
     description!: string;
+    steps!: string;
 }
