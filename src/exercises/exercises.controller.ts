@@ -26,7 +26,7 @@ export class ExerciseController {
       title: exerciseJson.title,
       level: exerciseJson.level,
       description: exerciseJson.description,
-      steps: exerciseJson.steps
+      steps: JSON.stringify(exerciseJson.steps)
     }
 
     return this.exerciseService.create(createExerciseDto);

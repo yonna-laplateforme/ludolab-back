@@ -1,24 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   // 1. CREATE
- 
-async create(data: { email: string; username: string; first_name: string; last_name: string; role: string}) {
-  return this.prisma.user.create({
-    data: {
-      email: data.email,
-      username: data.username,
-      first_name: data.first_name, // ◄ Ajouté
-      last_name: data.last_name,   // ◄ Ajouté
-      password: 'password_temporaire', 
-      role: data.role
-    },
-  });
-}
+
+  async create(data: {
+    email: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    role: string;
+  }) {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash('password_temporaire', saltRounds);
+
+    return this.prisma.user.create({
+      data: {
+        email: data.email,
+        username: data.username,
+        first_name: data.first_name, // ◄ Ajouté
+        last_name: data.last_name, // ◄ Ajouté
+        password: hashedPassword,
+        role: data.role,
+      },
+    });
+  }
 
   // 2. READ ALL
   async findAll() {
@@ -29,6 +39,21 @@ async create(data: { email: string; username: string; first_name: string; last_n
   async findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
+    });
+  }
+  // 2. READ BY EMAIL
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  // 2. READ BY IDENTIFIER
+  async findByIdentifier(identifier: string) {
+    return this.prisma.user.findFirst({
+      where: {
+        OR: [{ email: identifier }, { username: identifier }],
+      },
     });
   }
 

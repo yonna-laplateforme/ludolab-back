@@ -5,11 +5,19 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
- @Post()
-create(@Body() createUserDto: { email: string; username: string; first_name: string; last_name: string; role: string}) {
-
-  return this.usersService.create(createUserDto); 
-}
+  @Post()
+  create(
+    @Body()
+    createUserDto: {
+      email: string;
+      username: string;
+      first_name: string;
+      last_name: string;
+      role: string;
+    },
+  ) {
+    return this.usersService.create(createUserDto);
+  }
 
   @Get()
   findAll() {
@@ -21,8 +29,16 @@ create(@Body() createUserDto: { email: string; username: string; first_name: str
     return this.usersService.findOne(+id);
   }
 
+  @Get('email')
+  findByEmail(@Param('email') email: string){
+    return this.usersService.findByEmail(email)
+  }
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: { email?: string; username?: string }) {
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: { email?: string; username?: string },
+  ) {
     return this.usersService.update(+id, updateUserDto);
   }
 
