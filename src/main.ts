@@ -4,17 +4,19 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Permet à ton front de se connecter à ton API (très utile pour la suite)
   app.enableCors({
-    origin: 'http://localhost:3001', 
+    origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
   const config = new DocumentBuilder()
     .setTitle('Ludolab API')
-    .setDescription('Documentation officielle de l\'API Ludolab avec intégration IA')
+    .setDescription(
+      "Documentation officielle de l'API Ludolab avec intégration IA",
+    )
     .setVersion('1.0')
     .addTag('exercises') // Regroupe tes routes sous un tag
     .build();
@@ -25,6 +27,8 @@ async function bootstrap() {
 
   await app.listen(3001);
   console.log('🚀 Le serveur NestJS tourne sur : http://localhost:3001');
-  console.log('📖 La documentation Swagger est disponible sur : http://localhost:3001/api');
+  console.log(
+    '📖 La documentation Swagger est disponible sur : http://localhost:3001/api',
+  );
 }
 bootstrap();

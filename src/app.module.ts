@@ -11,10 +11,39 @@ import { SubjectsModule } from './subjects/subjects.module';
 import { SubscriptionsService } from './subscriptions/subscriptions.service';
 import { SubscriptionsController } from './subscriptions/subscriptions.controller';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
+import { UsersService } from './users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, UsersModule, ExerciseModule, AiInteractionsModule, ProgressionModule, SubjectsModule, SubscriptionsModule], // ◄ On injecte Prisma ici pour qu'il s'allume au démarrage !
-  controllers: [AppController, ProgressionController, SubscriptionsController],
-  providers: [ProgressionService, SubscriptionsService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // <-- C'est cette ligne magique qui règle tout !
+    }),
+    PrismaModule,
+    UsersModule,
+    ExerciseModule,
+    AiInteractionsModule,
+    ProgressionModule,
+    SubjectsModule,
+    SubscriptionsModule,
+    AuthModule,
+  ], // ◄ On injecte Prisma ici pour qu'il s'allume au démarrage !
+  controllers: [
+    AppController,
+    ProgressionController,
+    SubscriptionsController,
+    AuthController,
+  ],
+  providers: [
+    ProgressionService,
+    SubscriptionsService,
+    AuthService,
+    UsersService,
+    JwtService,
+  ],
 })
 export class AppModule {}
