@@ -42,7 +42,14 @@ export class AiInteractionsService {
   }
 
   async generateExerciceDetails(cloudinaryUrl: string) {
-    const responseAxios = await axios.get(cloudinaryUrl, {
+    // Si l'utilisateur envoie un PDF, Cloudinary bloque souvent le téléchargement direct (401)
+    // En changeant l'extension en .jpg, Cloudinary convertit automatiquement la 1ère page en image !
+    let fetchUrl = cloudinaryUrl;
+    if (fetchUrl.toLowerCase().endsWith('.pdf')) {
+      fetchUrl = fetchUrl.replace(/\.pdf$/i, '.jpg');
+    }
+
+    const responseAxios = await axios.get(fetchUrl, {
       responseType: 'arraybuffer',
     });
     const buffer = Buffer.from(responseAxios.data, 'binary');
@@ -99,7 +106,7 @@ Génère UNIQUEMENT un objet JSON valide structuré de cette manière :
 }`;
 
     const response = await this.aiGemini.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents: [prompt, imagePart],
       config: {
         responseMimeType: 'application/json',
