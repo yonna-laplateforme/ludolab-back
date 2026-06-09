@@ -18,25 +18,22 @@ export class AiInteractionsService {
     help_type: string;
   }) {
     return this.prisma.aiInteraction.create({
-      // ◄ Ajout du "s"
       data: data,
     });
   }
 
   async findAll() {
-    return this.prisma.aiInteraction.findMany(); // ◄ Ajout du "s"
+    return this.prisma.aiInteraction.findMany(); 
   }
 
   async findOne(id: number) {
     return this.prisma.aiInteraction.findUnique({
-      // ◄ Ajout du "s"
       where: { id },
     });
   }
 
   async remove(id: number) {
     return this.prisma.aiInteraction.delete({
-      // ◄ Ajout du "s"
       where: { id },
     });
   }

@@ -14,6 +14,10 @@ export class UsersService {
     first_name: string;
     last_name: string;
     role: string;
+    birthday: Date;
+    country:string;
+    postal_code:string;
+    adress:string;
   }) {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash('password_temporaire', saltRounds);
@@ -26,6 +30,10 @@ export class UsersService {
         last_name: data.last_name, // ◄ Ajouté
         password: hashedPassword,
         role: data.role,
+        birthday: new Date(data.birthday),
+        country: data.country,
+        postal_code:data.postal_code,
+        adress:data.adress
       },
     });
   }
