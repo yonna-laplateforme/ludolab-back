@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -13,9 +13,14 @@ export class AuthService {
   ) {}
 
   async signIn(identifier: string, password: string): Promise<any> {
+    console.log('OK');
     const user = await this.UsersService.findByIdentifier(identifier);
     if (user != null) {
       console.log(await bcrypt.compare(password, user.password));
+    }
+    if (user == null)
+    {
+      throw new NotFoundException("Identifiants incorrect")
     }
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = {

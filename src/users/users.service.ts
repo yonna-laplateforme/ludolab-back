@@ -13,6 +13,7 @@ export class UsersService {
     username: string;
     first_name: string;
     last_name: string;
+    password:string;
     role: string;
     birthday: Date;
     country:string;
@@ -20,7 +21,7 @@ export class UsersService {
     adress:string;
   }) {
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash('password_temporaire', saltRounds);
+    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
     return this.prisma.user.create({
       data: {
