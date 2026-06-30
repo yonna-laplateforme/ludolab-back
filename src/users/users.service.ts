@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   // 1. CREATE
 
@@ -13,14 +13,15 @@ export class UsersService {
     username: string;
     first_name: string;
     last_name: string;
+    password: string;
     role: string;
     birthday: Date;
-    country:string;
-    postal_code:string;
-    adress:string;
+    country: string;
+    postal_code: string;
+    adress: string;
   }) {
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash('password_temporaire', saltRounds);
+    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
     return this.prisma.user.create({
       data: {
@@ -32,8 +33,8 @@ export class UsersService {
         role: data.role,
         birthday: new Date(data.birthday),
         country: data.country,
-        postal_code:data.postal_code,
-        adress:data.adress
+        postal_code: data.postal_code,
+        adress: data.adress
       },
     });
   }
@@ -58,6 +59,7 @@ export class UsersService {
 
   // 2. READ BY IDENTIFIER
   async findByIdentifier(identifier: string) {
+    console.log(identifier)
     return this.prisma.user.findFirst({
       where: {
         OR: [{ email: identifier }, { username: identifier }],
