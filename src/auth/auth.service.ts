@@ -15,7 +15,7 @@ export class AuthService {
   async signIn(identifier: string, password: string): Promise<any> {
     const user = await this.UsersService.findByIdentifier(identifier);
     if (user == null) {
-      throw new UnauthorizedException("Identifiants incorrect")
+      throw new UnauthorizedException('Identifiants incorrect');
     }
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = {
@@ -24,7 +24,7 @@ export class AuthService {
       };
 
       return {
-        access_tokken: this.jwtService.sign(payload, {
+        access_token: this.jwtService.sign(payload, {
           secret: this.configService.get<string>('JWT_SECRET'),
         }),
       };
