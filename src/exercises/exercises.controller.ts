@@ -59,8 +59,11 @@ export class ExerciseController {
         exerciseJson.subject_name || 'Général',
       );
 
-      // Récupération sécurisée d'un utilisateur existant ou création d'un profil par défaut
-      let defaultUser = await this.prisma.user.findFirst();
+      // Récupération sécurisée d'un utilisateur existant (uniquement l'ID pour éviter les erreurs de date)
+      let defaultUser = await this.prisma.user.findFirst({
+        select: { id: true },
+      });
+
       if (!defaultUser) {
         defaultUser = await this.prisma.user.create({
           data: {
@@ -73,6 +76,7 @@ export class ExerciseController {
             country: 'France',
             birthday: new Date('2010-01-01'),
           },
+          select: { id: true },
         });
       }
 

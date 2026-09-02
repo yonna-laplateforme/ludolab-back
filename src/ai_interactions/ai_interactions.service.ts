@@ -130,7 +130,7 @@ Génère UNIQUEMENT un objet JSON valide structuré comme suit :
 }`;
 
     const response = await this.aiGemini.models.generateContent({
-      model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite',
       contents: [prompt, imagePart],
       config: {
         responseMimeType: 'application/json',
@@ -206,7 +206,7 @@ Génère UNIQUEMENT un objet JSON valide structuré ainsi :
 }`;
 
       const response = await this.aiGemini.models.generateContent({
-        model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
+        model: process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite',
         contents: [prompt],
         config: {
           responseMimeType: 'application/json',
