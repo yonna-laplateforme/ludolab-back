@@ -14,20 +14,32 @@ export class AuthService {
 
   async signIn(identifier: string, password: string): Promise<any> {
     const user = await this.UsersService.findByIdentifier(identifier);
-    if (user == null) {
-      throw new UnauthorizedException('Identifiants incorrect');
+    if (!user) {
+      throw new UnauthorizedException('Identifiant ou mot de passe incorrect');
     }
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const payload = {
-        username: user.username,
-        id: user.id,
-      };
 
-      return {
-        access_token: this.jwtService.sign(payload, {
-          secret: this.configService.get<string>('JWT_SECRET'),
-        }),
-      };
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Identifiant ou mot de passe incorrect');
     }
+
+    const payload = {
+      username: user.username,
+      id: user.id,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      }),
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        role: user.role,
+      },
+    };
   }
 }

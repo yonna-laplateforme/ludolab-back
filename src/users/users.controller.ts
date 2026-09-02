@@ -21,9 +21,10 @@ export class UsersController {
       username: string;
       first_name: string;
       last_name: string;
-      password:string;
+      password: string;
       role: string;
-      birthday: Date;
+      birthday: Date | string;
+      phone_number?: string;
       country: string;
       postal_code: string;
       adress: string;
