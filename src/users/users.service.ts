@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
@@ -15,28 +15,41 @@ export class UsersService {
     last_name: string;
     password: string;
     role: string;
-    birthday: Date;
+    birthday: Date | string;
+    phone_number?: string;
     country: string;
     postal_code: string;
     adress: string;
   }) {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+    try {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
-    return this.prisma.user.create({
-      data: {
-        email: data.email,
-        username: data.username,
-        first_name: data.first_name, // ◄ Ajouté
-        last_name: data.last_name, // ◄ Ajouté
-        password: hashedPassword,
-        role: data.role,
-        birthday: new Date(data.birthday),
-        country: data.country,
-        postal_code: data.postal_code,
-        adress: data.adress
-      },
-    });
+      return await this.prisma.user.create({
+        data: {
+          email: data.email,
+          username: data.username,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          password: hashedPassword,
+          role: data.role || 'user',
+          birthday: new Date(data.birthday),
+          phone_number: data.phone_number,
+          country: data.country,
+          postal_code: data.postal_code,
+          adress: data.adress,
+        },
+      });
+    } catch (error: any) {
+      if (error?.code === 'P2002') {
+        const target = error.meta?.target;
+        if (target && target.includes('email')) {
+          throw new ConflictException('Cette adresse e-mail est déjà utilisée par un autre compte.');
+        }
+        throw new ConflictException('Un compte avec ces identifiants existe déjà.');
+      }
+      throw error;
+    }
   }
 
   // 2. READ ALL
