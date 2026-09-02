@@ -130,7 +130,7 @@ Génère UNIQUEMENT un objet JSON valide structuré comme suit :
 }`;
 
     const response = await this.aiGemini.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
       contents: [prompt, imagePart],
       config: {
         responseMimeType: 'application/json',
@@ -170,7 +170,8 @@ Génère UNIQUEMENT un objet JSON valide structuré comme suit :
     feedback: string;
     hint?: string;
   }> {
-    const prompt = `Tu es un tuteur pédagogique bienveillant et stimulant sur la plateforme LudoLab.
+    try {
+      const prompt = `Tu es un tuteur pédagogique bienveillant et stimulant sur la plateforme LudoLab.
 Ton objectif est d'évaluer la réponse d'un élève pour une étape spécifique d'un exercice scolaire.
 
 CONTEXTE DE L'EXERCICE :
@@ -204,29 +205,36 @@ Génère UNIQUEMENT un objet JSON valide structuré ainsi :
   "hint": "Si besoin, pense à..."
 }`;
 
-    const response = await this.aiGemini.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: [prompt],
-      config: {
-        responseMimeType: 'application/json',
-      },
-    });
+      const response = await this.aiGemini.models.generateContent({
+        model: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
+        contents: [prompt],
+        config: {
+          responseMimeType: 'application/json',
+        },
+      });
 
-    if (response.text) {
-      try {
-        return JSON.parse(response.text);
-      } catch (err) {
-        console.error('Erreur parsing JSON validation step:', err);
-        return {
-          is_valid: false,
-          feedback: "Une erreur est survenue lors de l'analyse. Veuillez réessayer.",
-        };
+      if (response.text) {
+        try {
+          return JSON.parse(response.text);
+        } catch (err) {
+          console.error('Erreur parsing JSON validation step:', err);
+          return {
+            is_valid: false,
+            feedback: "Une erreur est survenue lors de l'analyse. Veuillez réessayer.",
+          };
+        }
       }
-    }
 
-    return {
-      is_valid: false,
-      feedback: "Impossible d'obtenir une réponse de l'assistant pédagogique.",
-    };
+      return {
+        is_valid: false,
+        feedback: "Impossible d'obtenir une réponse de l'assistant pédagogique.",
+      };
+    } catch (error) {
+      console.error('Erreur validateStudentStep Gemini:', error);
+      return {
+        is_valid: false,
+        feedback: "Une erreur est survenue lors de la communication avec le tuteur IA.",
+      };
+    }
   }
 }
