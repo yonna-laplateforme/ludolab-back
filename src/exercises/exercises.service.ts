@@ -18,6 +18,7 @@ export class ExerciseService {
 
   async findAll() {
     return this.prisma.exercise.findMany({
+      orderBy: { id: 'desc' },
       include: {
         subjects: true,
         progression: true,
