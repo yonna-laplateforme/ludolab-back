@@ -6,6 +6,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 @Module({
   imports: [PrismaModule],
   controllers: [AiInteractionsController],
-  providers: [AiInteractionsService]
+  providers: [AiInteractionsService],
+  exports: [AiInteractionsService],
 })
 export class AiInteractionsModule {}

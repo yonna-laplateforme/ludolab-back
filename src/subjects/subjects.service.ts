@@ -14,6 +14,30 @@ export class SubjectsService {
       },
     });
   }
+
+  // 1b. Trouver ou créer par nom
+  async findOrCreateByName(name: string, defaultIcon = 'book') {
+    const trimmed = (name || 'Général').trim();
+    const existing = await this.prisma.subject.findFirst({
+      where: {
+        name: {
+          contains: trimmed,
+        },
+      },
+    });
+
+    if (existing) {
+      return existing;
+    }
+
+    return this.prisma.subject.create({
+      data: {
+        name: trimmed,
+        icon: defaultIcon,
+      },
+    });
+  }
+
   // 2. Recuperer tout
   async findAll() {
     return this.prisma.subject.findMany();

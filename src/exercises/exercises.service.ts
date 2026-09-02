@@ -10,25 +10,33 @@ export class ExerciseService {
     return this.prisma.exercise.create({
       data: createExerciseDto,
       include: {
-        subjects: true
-      }
+        subjects: true,
+        progression: true,
+      },
     });
   }
 
   async findAll() {
-    return this.prisma.exercise.findMany(); // ◄ Ajout du "s"
+    return this.prisma.exercise.findMany({
+      include: {
+        subjects: true,
+        progression: true,
+      },
+    });
   }
 
   async findOne(id: number) {
     return this.prisma.exercise.findUnique({
-      // ◄ Ajout du "s"
       where: { id },
+      include: {
+        subjects: true,
+        progression: true,
+      },
     });
   }
 
   async remove(id: number) {
     return this.prisma.exercise.delete({
-      // ◄ Ajout du "s"
       where: { id },
     });
   }

@@ -73,12 +73,15 @@ model Progression {
   id               Int      @id @default(autoincrement())
   user_id          Int
   exercise_id      Int
+  current_step     Int      @default(1)
   status           String   @default("en_cours") @db.VarChar(255)
   score_percentage Float?   @db.Float
+  step_answers     String?  @db.LongText
   last_activity    DateTime @default(now()) @db.Timestamp(0)
   users            User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "progression_ibfk_1")
   exercises        Exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "progression_ibfk_2")
 
+  @@unique([user_id, exercise_id], map: "user_exercise_unique")
   @@index([exercise_id], map: "exercise_id")
   @@index([user_id], map: "user_id")
   @@map("progression")
